@@ -1,0 +1,47 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+license = "TDL-M"
+issueTrackerURL = "${modIssues}"
+
+[[mods]]
+modId = "${id}"
+version = "${version}"
+displayName = "${modName}"
+displayURL = "https://github.com/fzzyhmstrs/EMI_loot"
+authors = "${modAuthor}"
+description = '''${modDesc}'''
+logoFile = "icon.png"
+
+# [[accessTransformers]]
+# file = "META-INF/accesstransformer.cfg"
+
+# [[mixins]]
+# config = "emi_loot.mixins.json"
+
+[[dependencies.${id}]]
+modId = "neoforge"
+type = "REQUIRED"
+versionRange = "[21.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${id}]]
+modId = "minecraft"
+type = "REQUIRED"
+versionRange = "[1.21,1.21.1]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${id}]]
+modId = "fzzy_config"
+type = "REQUIRED"
+versionRange = "[${fzzyConfigVersion},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.${id}]]
+modId = "kotlinforforge"
+type = "REQUIRED"
+versionRange = "[${kotlinForForgeVersion},)"
+ordering = "NONE"
+side = "BOTH"

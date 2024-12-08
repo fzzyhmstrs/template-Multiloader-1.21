@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "${modName}",
+  "description": "${modDesc}",
+  "authors": [
+    "${modAuthor}"
+  ],
+  "contact": {
+    "sources": "${modSources}",
+    "issues": "${modIssues}",
+    "homepage": "${modHomepage}"
+  },
+  "license": "TDL-M",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.${id}.ModFabric"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.${id}.ModFabricClient"
+      }
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=${fabricLoaderVersion}",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=${fabricKotlinVersion}",
+    "minecraft": ">=1.21 <=1.21.1",
+    "java": ">=21",
+    "fzzy_config": ">=${fzzyConfigVersion}"
+  },
+  "mixins": []
+}
