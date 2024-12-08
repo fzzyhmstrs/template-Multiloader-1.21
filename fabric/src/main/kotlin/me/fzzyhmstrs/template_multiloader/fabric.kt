@@ -8,16 +8,20 @@ object ModFabric: ModInitializer {
 
     override fun onInitialize() {
         Mod.init()
+
+
+
+
     }
-
-
 }
 
 object ModFabricClient: ClientModInitializer {
 
     override fun onInitializeClient() {
         ModClient.init()
+
+
+
+
     }
-
-
 }

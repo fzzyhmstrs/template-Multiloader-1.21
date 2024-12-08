@@ -8,6 +8,10 @@ import net.neoforged.bus.api.IEventBus
 class ModNeoforge(bus: IEventBus) {
     init {
         Mod.init()
+
+
+
+
     }
 
 }
@@ -17,6 +21,10 @@ class ModNeoForgeClient(bus: IEventBus) {
 
     init {
         ModClient.init()
+
+
+
+
     }
 
 
