@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 /*
 * Copyright (c) 2024 Fzzyhmstrs
 *
@@ -8,6 +10,7 @@
 
 plugins {
     id("dev.architectury.loom").apply(false)//.version("1.7-SNAPSHOT").apply(false)
+    id("architectury-plugin")
     id("com.github.johnrengelman.shadow").apply(false)//.version("7.1.2").apply(false)
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
@@ -28,6 +31,13 @@ subprojects {
 allprojects {
     apply {
         plugin("java")
+    }
+    apply {
+        plugin("architectury-plugin")
+    }
+
+    architectury {
+        compileOnly()
     }
 
     base {
@@ -67,8 +77,8 @@ allprojects {
             options.release.set(javaVersion.majorVersion.toInt())
         }
         withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = javaVersion.toString()
+            compilerOptions {
+                jvmTarget.set(JvmTarget.fromTarget(javaVersion.majorVersion))
                 freeCompilerArgs = listOf("-Xjvm-default=all")
             }
         }

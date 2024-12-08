@@ -3,9 +3,16 @@ plugins {
     kotlin("jvm")
 }
 
-val minecraftVersion: String by rootProject
+val minecraftVersion: String by project
+val modVersion: String by project
+val enabledPlatforms: String by rootProject
+
+architectury {
+    common(enabledPlatforms.split(","))
+}
 
 dependencies {
+
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
     val yarnMappingsPatchVersion: String by project
@@ -30,16 +37,18 @@ if (File("src/main/resources/${archivesBaseName}.accesswidener").exists()) {
 
 tasks {
     jar {
-        from("LICENSE") { rename { "${base.archivesName.get()}_${it}" } }
-    }
-    jar {
-        from( "credits.txt") { rename { "${base.archivesName.get()}_${it}" } }
+        from(rootProject.file( "LICENSE")) { rename { "${base.archivesName.get()}_${it}" } }
+        from( rootProject.file("credits.txt")) { rename { "${base.archivesName.get()}_${it}" } }
+        from( rootProject.file("changelog.md")) { rename { "${modVersion}+${minecraftVersion}_${it}" } }
+        filesMatching("template_multiloader.mixins.json") {
+            rename { n ->  println(n); n.replace("template_multiloader", archivesBaseName) }
+        }
+        exclude("package-info.java")
     }
 
     processResources {
         inputs.property("id", base.archivesName.get())
         filesMatching("*.mixins.json") {
-            rename { n -> n.replace("template_multiloader", archivesBaseName) }
             expand(mutableMapOf(
                 "id" to base.archivesName.get()
             ))

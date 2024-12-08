@@ -14,6 +14,11 @@ plugins {
 
 evaluationDependsOn(":common")
 
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
 val archivesBaseName: String by rootProject
 
 val common: Configuration by configurations.creating
@@ -28,6 +33,11 @@ configurations {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    /*mods.getByName("main") {
+        sourceSet(sourceSets.main.get())
+        sourceSet(project(":common").sourceSets.main.get())
+    }*/
 }
 
 
@@ -69,20 +79,16 @@ val modIssues: String by rootProject
 val modHomepage: String by rootProject
 
 tasks {
-    jar {
-        from("LICENSE") { rename { "${base.archivesName.get()}_${it}" } }
-    }
-    jar {
-        from( "credits.txt") { rename { "${base.archivesName.get()}_${it}" } }
-    }
 
     processResources {
         val fabricLoaderVersion: String by rootProject
         val fabricKotlinVersion: String by rootProject
+        val fzzyConfigVersion: String by rootProject
         inputs.property("version", project.version)
         inputs.property("id", base.archivesName.get())
         inputs.property("fabricLoaderVersion", fabricLoaderVersion)
         inputs.property("fabricKotlinVersion", fabricKotlinVersion)
+        inputs.property("fzzyConfigVersion", fzzyConfigVersion)
         inputs.property("modName", modName)
         inputs.property("modDesc", modDesc)
         inputs.property("modAuthor", modAuthor)
@@ -93,8 +99,9 @@ tasks {
             expand(mutableMapOf(
                 "version" to project.version,
                 "id" to base.archivesName.get(),
-                "loaderVersion" to fabricLoaderVersion,
+                "fabricLoaderVersion" to fabricLoaderVersion,
                 "fabricKotlinVersion" to fabricKotlinVersion,
+                "fzzyConfigVersion" to fzzyConfigVersion,
                 "modName" to modName,
                 "modDesc" to modDesc,
                 "modAuthor" to modAuthor,
@@ -108,7 +115,7 @@ tasks {
     shadowJar {
         exclude("architectury.common.json")
 
-        configurations = mutableListOf<FileCollection>(project.configurations["shadowCommon"]);
+        configurations = mutableListOf<FileCollection>(project.configurations["shadowCommon"])
         archiveClassifier.set("dev-shadow")
     }
 

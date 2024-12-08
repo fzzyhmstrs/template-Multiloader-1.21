@@ -15,6 +15,11 @@ plugins {
 
 evaluationDependsOn(":common")
 
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
 val archivesBaseName: String by rootProject
 
 val common: Configuration by configurations.creating
@@ -29,6 +34,11 @@ configurations {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    mods.getByName("main") {
+        sourceSet(sourceSets.main.get())
+        sourceSet(project(":common").sourceSets.main.get())
+    }
 }
 
 repositories {
@@ -77,54 +87,33 @@ val modIssues: String by rootProject
 val modHomepage: String by rootProject
 
 tasks {
-    jar {
-        from("LICENSE") { rename { "${base.archivesName.get()}_${it}" } }
-    }
-    jar {
-        from( "credits.txt") { rename { "${base.archivesName.get()}_${it}" } }
-    }
 
     processResources {
         val neoforgeLoaderVersion: String by rootProject
         val kotlinForForgeVersion: String by rootProject
+        val fzzyConfigVersion: String by rootProject
         inputs.property("version", project.version)
         inputs.property("id", base.archivesName.get())
         inputs.property("neoforgeLoaderVersion", neoforgeLoaderVersion)
         inputs.property("kotlinForForgeVersion", kotlinForForgeVersion)
-        filesMatching("META-INF/neoforge.mods.toml") {
-            expand(mutableMapOf(
-                "version" to project.version,
-                "id" to base.archivesName.get(),
-                "neoforgeLoaderVersion" to neoforgeLoaderVersion,
-                "kotlinForForgeVersion" to kotlinForForgeVersion
-            )) }
-    }
-
-    processResources {
-        val neoforgeLoaderVersion: String by rootProject
-        val kotlinForForgeVersion: String by rootProject
-        inputs.property("version", project.version)
-        inputs.property("id", base.archivesName.get())
-        inputs.property("neoforgeLoaderVersion", neoforgeLoaderVersion)
-        inputs.property("kotlinForForgeVersion", kotlinForForgeVersion)
+        inputs.property("fzzyConfigVersion", fzzyConfigVersion)
         inputs.property("modName", modName)
         inputs.property("modDesc", modDesc)
         inputs.property("modAuthor", modAuthor)
         inputs.property("modSources", modSources)
         inputs.property("modIssues", modIssues)
-        inputs.property("modHomepage", modHomepage)
         filesMatching("META-INF/neoforge.mods.toml") {
             expand(mutableMapOf(
                 "version" to project.version,
                 "id" to base.archivesName.get(),
                 "neoforgeLoaderVersion" to neoforgeLoaderVersion,
                 "kotlinForForgeVersion" to kotlinForForgeVersion,
+                "fzzyConfigVersion" to fzzyConfigVersion,
                 "modName" to modName,
                 "modDesc" to modDesc,
                 "modAuthor" to modAuthor,
                 "modSources" to modSources,
-                "modIssues" to modIssues,
-                "modHomepage" to modHomepage)
+                "modIssues" to modIssues)
             )
         }
     }
@@ -132,7 +121,7 @@ tasks {
     shadowJar {
         exclude("architectury.common.json")
 
-        configurations = mutableListOf<FileCollection>(project.configurations["shadowCommon"]);
+        configurations = mutableListOf<FileCollection>(project.configurations["shadowCommon"])
         archiveClassifier.set("dev-shadow")
     }
 

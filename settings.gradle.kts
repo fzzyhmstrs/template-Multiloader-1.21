@@ -10,6 +10,8 @@ pluginManagement {
     plugins {
         val loomVersion: String by settings
         id("dev.architectury.loom").version(loomVersion).apply(false)
+        val pluginVersion: String by settings
+        id("architectury-plugin").version(pluginVersion).apply(false)
         val shadowVersion: String by settings
         id("com.github.johnrengelman.shadow").version(shadowVersion).apply(false)
     }
